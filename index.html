@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Loto Grana - Apostas e Gestão de Loterias</title>
+    <meta name="description" content="Faça suas apostas na Mega Sena, LotoFácil e Quina com inteligência artificial.">
+    <meta name="theme-color" content="#005CA9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Loto Grana">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="apple-touch-icon" href="assets/icon.png">
+    <!-- Google Font Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css?v=1662131232131231123123232132136293">
+    <link rel="stylesheet" href="css/hacking.css">
+    <link rel="stylesheet" href="css/bet-confirmation.css">
+    <link rel="manifest" href="manifest.json">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-left">
+                    <button class="btn-menu" onclick="toggleSidebar(true)" aria-label="Abrir menu">
+                        <i data-lucide="menu"></i>
+                    </button>
+                    <div class="greeting">
+                        <span class="balance-label">Saldo disponível</span>
+                        <span class="balance-value" id="balance">R$ 0,00</span>
+                    </div>
+                </div>
+                <button class="btn-deposit" onclick="openDepositModal()" aria-label="Adicionar saldo">Adicionar saldo</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Screens loaded dynamically -->
+        </main>
+
+        <div class="sidebar-overlay hidden" onclick="toggleSidebar(false)"></div>
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="btn-sidebar-close" onclick="toggleSidebar(false)" aria-label="Fechar menu">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="sidebar-user" onclick="showScreen('profile')">
+                <div class="sidebar-user-avatar"><i data-lucide="user-circle"></i></div>
+                <div class="sidebar-user-info">
+                    <span class="sidebar-user-name" id="sidebar-user-name">Apostador</span>
+                    <span class="sidebar-user-sub">Seja bem vindo</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <button class="sidebar-item" onclick="showScreen('home')">
+                    <span class="sidebar-icon"><i data-lucide="clover"></i></span>
+                    <span class="sidebar-label">Jogos do Dia</span>
+                </button>
+                <button class="sidebar-item" onclick="showScreen('pools')">
+                    <span class="sidebar-icon"><i data-lucide="users"></i></span>
+                    <span class="sidebar-label">Bolão</span>
+                </button>
+                <button class="sidebar-item" onclick="showScreen('wallet')">
+                    <span class="sidebar-icon"><i data-lucide="wallet"></i></span>
+                    <span class="sidebar-label">Carteira</span>
+                </button>
+                <button class="sidebar-item" onclick="showScreen('results')">
+                    <span class="sidebar-icon"><i data-lucide="trophy"></i></span>
+                    <span class="sidebar-label">Últimos Concursos</span>
+                </button>
+                <button class="sidebar-item" onclick="showScreen('profile')">
+                    <span class="sidebar-icon"><i data-lucide="user"></i></span>
+                    <span class="sidebar-label">Perfil</span>
+                </button>
+                <button class="sidebar-item" onclick="openPwaInstallFromSidebar()">
+                    <span class="sidebar-icon"><i data-lucide="download"></i></span>
+                    <span class="sidebar-label">Instalar app</span>
+                </button>
+                <a class="sidebar-item" href="https://acessoprotegido.com/suporte/" target="_blank" rel="noopener noreferrer">
+                    <span class="sidebar-icon"><i data-lucide="headphones"></i></span>
+                    <span class="sidebar-label">Suporte</span>
+                </a>
+                <button class="sidebar-item sidebar-item-logout" onclick="handleLogout()">
+                    <span class="sidebar-icon"><i data-lucide="log-out"></i></span>
+                    <span class="sidebar-label">Sair</span>
+                </button>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-links">
+                    <a href="#" onclick="showTerms(); return false;">Termos de Uso</a>
+                    <a href="#" onclick="showPrivacy(); return false;">Privacidade</a>
+                </div>
+                <span class="sidebar-version">v1.0.0</span>
+            </div>
+        </aside>
+
+        <!-- Bottom Navigation Bar (Mobile) -->
+        <nav class="bottom-nav" id="bottom-nav">
+            <button class="bottom-nav-item" data-screen="pools" onclick="showScreen('pools')">
+                <i data-lucide="users"></i>
+                <span>Bolão</span>
+            </button>
+            <button class="bottom-nav-item active" data-screen="home" onclick="showScreen('home')">
+                <i data-lucide="clover"></i>
+                <span>Jogos do Dia</span>
+            </button>
+            <button class="bottom-nav-item" data-screen="wallet" onclick="showScreen('wallet')">
+                <i data-lucide="wallet"></i>
+                <span>Carteira</span>
+            </button>
+        </nav>
+
+        <!-- Mode Selection Modal - Professional Design -->
+        <div class="mode-modal hidden" id="mode-modal">
+            <div class="mode-modal-content mode-modal-enhanced">
+                <button class="mode-modal-close-x" onclick="closeModeModal()">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="mode-modal-header">
+                    <img id="mode-selected-logo" src="" alt="Loteria" class="mode-selected-logo" loading="lazy">
+                    <h3>Como deseja gerar seus jogos?</h3>
+                </div>
+                <div class="mode-options">
+                    <!-- IA Expert Option - Premium Centered -->
+                    <button class="mode-option mode-option-ia" onclick="confirmModeSelection('ai')">
+                        <div class="mode-option-badge">RECOMENDADO</div>
+                        <div class="mode-option-glow"></div>
+                        <div class="mode-ia-content">
+                            <span class="mode-option-icon mode-option-icon-ia">
+                                <img src="assets/logo-ia.png" alt="IA" class="mode-ai-logo" loading="lazy">
+                            </span>
+                            <span class="mode-option-title">Super IA Expert</span>
+                            <span class="mode-option-desc">Números otimizados com maior probabilidade de acerto</span>
+                        </div>
+                        <div class="mode-ia-cta">
+                            <span>GERAR COM IA</span>
+                            <i data-lucide="sparkles"></i>
+                        </div>
+                    </button>
+                    <!-- Separador -->
+                    <div class="mode-options-divider">
+                        <span class="mode-options-divider-line"></span>
+                        <span class="mode-options-divider-text">ou</span>
+                        <span class="mode-options-divider-line"></span>
+                    </div>
+                    <!-- Manual Option -->
+                    <button class="mode-option mode-option-manual" onclick="confirmModeSelection('manual')">
+                        <span class="mode-option-icon"><i data-lucide="hand"></i></span>
+                        <div class="mode-option-text">
+                            <span class="mode-option-title">Manual</span>
+                            <span class="mode-option-desc">Escolha seus próprios números</span>
+                        </div>
+                        <div class="mode-manual-cta">SELECIONAR</div>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quantity Modal - Redesigned -->
+        <div class="quantity-modal hidden" id="quantity-modal">
+            <div class="quantity-modal-content quantity-modal-enhanced">
+                <button class="quantity-back-btn" onclick="backToModeSelection()">
+                    <i data-lucide="arrow-left"></i>
+                </button>
+                <button class="quantity-close-btn" onclick="closeQuantityModal()">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="quantity-logo-bar">
+                    <img id="quantity-lottery-logo" src="" alt="Loteria" loading="lazy">
+                </div>
+                <div class="quantity-modal-header">
+                    <h3>Quantos jogos deseja gerar?</h3>
+                </div>
+                
+                <!-- Uso mais comum -->
+                <div class="quantity-category">
+                    <span class="quantity-category-label">Uso mais comum</span>
+                    <div class="quantity-category-buttons">
+                        <button class="quantity-quick-btn" data-qty="5" onclick="setQuickQuantity(5)">5</button>
+                        <button class="quantity-quick-btn" data-qty="10" onclick="setQuickQuantity(10)">10</button>
+                        <button class="quantity-quick-btn" data-qty="20" onclick="setQuickQuantity(20)">20</button>
+                    </div>
+                </div>
+                
+                <!-- Estratégia avançada -->
+                <div class="quantity-category">
+                    <span class="quantity-category-label">Estratégia avançada</span>
+                    <div class="quantity-category-buttons">
+                        <button class="quantity-quick-btn" data-qty="30" onclick="setQuickQuantity(30)">30</button>
+                        <button class="quantity-quick-btn" data-qty="50" onclick="setQuickQuantity(50)">50</button>
+                        <button class="quantity-quick-btn" data-qty="75" onclick="setQuickQuantity(75)">75</button>
+                    </div>
+                </div>
+                
+                <!-- Volume alto -->
+                <div class="quantity-category">
+                    <span class="quantity-category-label">Volume alto</span>
+                    <div class="quantity-category-buttons">
+                        <button class="quantity-quick-btn" data-qty="100" onclick="setQuickQuantity(100)">100</button>
+                        <button class="quantity-quick-btn" data-qty="150" onclick="setQuickQuantity(150)">150</button>
+                        <button class="quantity-quick-btn" data-qty="200" onclick="setQuickQuantity(200)">200</button>
+                        <button class="quantity-quick-btn" data-qty="300" onclick="setQuickQuantity(300)">300</button>
+                    </div>
+                </div>
+                
+                <!-- Input hidden para manter compatibilidade com JS -->
+                <input type="hidden" id="quantity-input" value="0">
+                
+                <div class="quantity-preview hidden" id="quantity-preview">
+                    <div class="quantity-preview-item">
+                        <span class="preview-label">Jogos:</span>
+                        <span class="preview-value" id="preview-games">0</span>
+                    </div>
+                    <div class="quantity-preview-item">
+                        <span class="preview-label">VALOR TOTAL:</span>
+                        <span class="preview-value preview-price" id="preview-price">R$ 0,00</span>
+                    </div>
+                </div>
+                
+                <p class="quantity-select-warning hidden" id="quantity-select-warning">Selecione a quantidade de jogos primeiro</p>
+                
+                <div class="quantity-actions quantity-actions-single">
+                    <button class="quantity-confirm quantity-confirm-ai disabled" id="quantity-confirm-btn" onclick="confirmQuantity()">
+                        <span class="quantity-ai-badge">
+                            <img src="assets/logo-ia.png" alt="IA" class="btn-ai-logo" loading="lazy">
+                        </span>
+                        <span class="quantity-btn-text">GERAR JOGOS PREMIADOS</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- IA Expert Modal -->
+        <div class="ia-modal hidden" id="ia-modal">
+            <div class="ia-lottery-select" id="ia-lottery-select">
+                <h3 class="ia-select-title">Selecione a Loteria</h3>
+                <div class="ia-lottery-options-grid">
+                    <div class="ia-lottery-card" onclick="startIAExpert('megasena')">
+                        <img src="assets/megasena.png" alt="Mega Sena" class="ia-lottery-logo" loading="lazy">
+                    </div>
+                    <div class="ia-lottery-card" onclick="startIAExpert('lotofacil')">
+                        <img src="assets/lotofacil.png" alt="LotoFácil" class="ia-lottery-logo" loading="lazy">
+                    </div>
+                    <div class="ia-lottery-card" onclick="startIAExpert('quina')">
+                        <img src="assets/quina.png" alt="Quina" class="ia-lottery-logo" loading="lazy">
+                    </div>
+                </div>
+                <button class="ia-close-btn" onclick="closeIAModal()">Cancelar</button>
+            </div>
+            <div class="ia-processing hidden" id="ia-processing">
+                <div class="ia-processing-card">
+                    <img id="ia-selected-logo" src="" alt="Loteria" class="ia-processing-logo" loading="lazy">
+                    <div class="ia-tasks-container" id="ia-tasks-container">
+                        <!-- Tasks will be rendered here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Deposit Modal (PIX) - Usado em Jogos do Dia quando saldo insuficiente -->
+        <div class="deposit-modal-overlay hidden" id="deposit-modal" role="dialog" aria-modal="true" aria-labelledby="deposit-modal-title" onclick="if(event.target===this) closeDepositModal()">
+            <div class="deposit-modal-content">
+                <button class="deposit-modal-close" onclick="closeDepositModal()" aria-label="Fechar">
+                    <i data-lucide="x"></i>
+                </button>
+                <h3 class="deposit-modal-title" id="deposit-modal-title">Adicionar saldo</h3>
+                
+                <!-- ETAPA 1: Valor -->
+                <div id="deposit-modal-step-amount">
+                    <div class="deposit-total-card deposit-modal-total">
+                        <div class="deposit-total-inner">
+                            <span class="deposit-total-label">Valor do depósito</span>
+                            <div class="deposit-total-value">
+                                R$ <span id="deposit-modal-value">100</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="deposit-values-card deposit-modal-values">
+                        <div class="deposit-values-grid">
+                            <button class="deposit-value-btn" onclick="setDepositAmountModal(20)" data-amount="20"><span class="btn-value">R$ 20</span></button>
+                            <button class="deposit-value-btn" onclick="setDepositAmountModal(50)" data-amount="50"><span class="btn-value">R$ 50</span></button>
+                            <button class="deposit-value-btn popular active" onclick="setDepositAmountModal(100)" data-amount="100"><span class="btn-popular-tag">Mais escolhido</span><span class="btn-value">R$ 100</span></button>
+                            <button class="deposit-value-btn" onclick="setDepositAmountModal(200)" data-amount="200"><span class="btn-value">R$ 200</span></button>
+                            <button class="deposit-value-btn" onclick="setDepositAmountModal(500)" data-amount="500"><span class="btn-value">R$ 500</span></button>
+                            <button class="deposit-value-btn" onclick="setDepositAmountModal(1000)" data-amount="1000"><span class="btn-value">R$ 1.000</span></button>
+                        </div>
+                        <div class="deposit-divider"><span>ou digite um valor</span></div>
+                        <div class="deposit-custom-input">
+                            <span class="input-currency">R$</span>
+                            <input type="text" id="deposit-modal-amount" value="100" placeholder="0" oninput="onDepositModalInputChange(this.value)" inputmode="numeric">
+                        </div>
+                        <span class="deposit-limits">Mínimo R$ 10 · Máximo R$ 5.000</span>
+                    </div>
+                    <button class="btn-deposit-pix deposit-modal-btn" onclick="processDepositModal()" id="btn-deposit-modal">
+                        <img src="assets/logo-pix.png" alt="PIX" class="btn-pix-icon"> Gerar código PIX
+                    </button>
+                    <div class="deposit-security-badge">
+                        <i data-lucide="shield-check"></i>
+                        <span>Ambiente 100% seguro</span>
+                    </div>
+                </div>
+
+                <!-- ETAPA 2: PIX -->
+                <div id="deposit-modal-step-pix" class="hidden">
+                    <div class="pix-payment-card">
+                        <div class="pix-payment-header">
+                            <img src="assets/logo-pix.png" alt="PIX" class="pix-payment-logo">
+                            <div class="pix-payment-value">
+                                <span class="pix-payment-label">Valor a pagar</span>
+                                <span class="pix-payment-amount">R$ <span id="deposit-modal-pix-value">0,00</span></span>
+                            </div>
+                        </div>
+                        <div class="pix-code-section">
+                            <p class="pix-code-instruction">Copie o código abaixo e cole no app do seu banco:</p>
+                            <div id="deposit-modal-pix-code" class="pix-code-display"></div>
+                            <button class="btn-copy-pix" onclick="copyPixCodeModal()" id="btn-copy-pix-modal">
+                                <i data-lucide="copy"></i> Copiar código PIX
+                            </button>
+                        </div>
+                        <div class="pix-status-section">
+                            <div id="deposit-modal-status-icon" class="pix-status-icon">
+                                <div class="pix-loading-spinner"></div>
+                            </div>
+                            <p id="deposit-modal-status-text" class="pix-status-text">Aguardando pagamento...</p>
+                            <p class="pix-status-hint">O saldo será creditado automaticamente</p>
+                        </div>
+                    </div>
+                    <button class="btn-cancel-deposit" onclick="cancelDepositModal()">
+                        <i data-lucide="x"></i> Cancelar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Insufficient Balance Modal - Professional Design -->
+        <div class="balance-modal hidden" id="balance-modal" role="dialog" aria-modal="true" aria-labelledby="balance-modal-title">
+            <div class="balance-modal-content">
+                <button class="balance-modal-close-btn" onclick="closeBalanceModal()">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="balance-modal-icon">
+                    <i data-lucide="wallet"></i>
+                </div>
+                <h3 id="balance-modal-title">Saldo Insuficiente</h3>
+                <div class="balance-modal-info">
+                    <div class="balance-info-row">
+                        <span class="balance-info-label">Seu saldo atual</span>
+                        <span class="balance-info-value" id="balance-modal-balance">R$ 0,00</span>
+                    </div>
+                    <div class="balance-info-row">
+                        <span class="balance-info-label">Valor da aposta</span>
+                        <span class="balance-info-value balance-info-cost" id="balance-modal-cost">R$ 0,00</span>
+                    </div>
+                </div>
+                <p class="balance-modal-sub">Recarregue sua conta para continuar com sua aposta.</p>
+                <div class="balance-modal-actions balance-modal-actions-single">
+                    <button class="balance-modal-recharge" onclick="handleAddBalanceFromBalanceModal()">
+                        <i data-lucide="plus-circle"></i>
+                        Adicionar saldo
+                    </button>
+                </div>
+                <div class="balance-modal-footer">
+                    <i data-lucide="zap"></i>
+                    <span>Depósito instantâneo via PIX</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pool Details Modal -->
+        <div class="pool-modal hidden" id="pool-modal" role="dialog" aria-modal="true" aria-labelledby="pool-modal-title" onclick="if(event.target===this) typeof closePoolModal==='function'&&closePoolModal()">
+            <div class="pool-modal-content">
+                <button class="pool-modal-close-btn" onclick="closePoolModal()">
+                    <i data-lucide="x"></i>
+                </button>
+                <div class="pool-modal-balance-top">
+                    <div class="pool-modal-user-info hidden" id="pool-modal-user-info">
+                        <i data-lucide="check-circle"></i>
+                        <span>Você já participa deste bolão com <strong id="pool-modal-user-quotas">0</strong> cota(s)</span>
+                    </div>
+                    <div class="pool-modal-balance-row">
+                        <span class="pool-modal-balance-label">Seu saldo:</span>
+                        <strong class="pool-modal-balance-value" id="pool-modal-balance">R$ 0,00</strong>
+                    </div>
+                </div>
+                <div class="pool-modal-quota-section pool-modal-quota-cards">
+                    <h3 class="pool-modal-quota-title" id="pool-modal-title">
+                        <i data-lucide="users"></i>
+                        Escolha suas cotas
+                    </h3>
+                    <p class="pool-modal-quota-subtitle">Quanto mais cotas, mais jogos e maiores suas chances de ganhar!</p>
+                    <div class="pool-modal-quota-popular">
+                        <i data-lucide="lightbulb"></i>
+                        <span>93% dos nossos ganhadores escolheram 10 cotas</span>
+                    </div>
+                    <div class="pool-modal-quota-cards-grid">
+                        <div class="pool-quota-card pool-quota-card-basico">
+                            <div class="pool-quota-card-badge">BÁSICO</div>
+                            <div class="pool-quota-card-header">
+                                <span class="pool-quota-card-qty">1 COTA</span>
+                                <span class="pool-quota-card-games">1.667 Jogos</span>
+                            </div>
+                            <ul class="pool-quota-card-features">
+                                <li><i data-lucide="check"></i> Bolão com 1.667 Jogos</li>
+                                <li><i data-lucide="check"></i> 1.667 Chances de Ganhar</li>
+                                <li><i data-lucide="check"></i> Máximo 50 Pessoas</li>
+                                <li><i data-lucide="check"></i> Acesso Imediato ao Grupo</li>
+                                <li><i data-lucide="check"></i> Comprovante de Apostas</li>
+                            </ul>
+                            <div class="pool-quota-card-price">
+                                <span class="pool-quota-card-value" id="pool-quota-price-1">R$ 100,00</span>
+                                <span class="pool-quota-card-installment">ou 12x de R$ 14,32</span>
+                            </div>
+                            <button type="button" class="pool-quota-card-btn" onclick="selectQuotaAndConfirm(1)">
+                                ADQUIRIR 1 COTA
+                            </button>
+                        </div>
+                        <div class="pool-quota-card pool-quota-card-popular">
+                            <div class="pool-quota-card-badge">POPULAR</div>
+                            <div class="pool-quota-card-header">
+                                <span class="pool-quota-card-qty">5 COTAS</span>
+                                <span class="pool-quota-card-games">8.333 Jogos</span>
+                            </div>
+                            <ul class="pool-quota-card-features">
+                                <li><i data-lucide="check"></i> Bolão com 8.333 Jogos</li>
+                                <li><i data-lucide="check"></i> 8.333 Chances de Ganhar</li>
+                                <li><i data-lucide="check"></i> Máximo 50 Pessoas</li>
+                                <li><i data-lucide="check"></i> Acesso Imediato ao Grupo</li>
+                                <li><i data-lucide="check"></i> Comprovante de Apostas</li>
+                            </ul>
+                            <div class="pool-quota-card-price">
+                                <span class="pool-quota-card-value" id="pool-quota-price-5">R$ 500,00</span>
+                                <span class="pool-quota-card-installment">ou 12x de R$ 71,61</span>
+                            </div>
+                            <button type="button" class="pool-quota-card-btn" onclick="selectQuotaAndConfirm(5)">
+                                ADQUIRIR 5 COTAS
+                            </button>
+                        </div>
+                        <div class="pool-quota-card pool-quota-card-recomendado">
+                            <div class="pool-quota-card-badge">RECOMENDADO</div>
+                            <div class="pool-quota-card-badge-sub">MELHOR CUSTO-BENEFÍCIO</div>
+                            <div class="pool-quota-card-header">
+                                <span class="pool-quota-card-qty">10 COTAS</span>
+                                <i data-lucide="star" class="pool-quota-card-star"></i>
+                                <span class="pool-quota-card-games">16.667 Jogos</span>
+                            </div>
+                            <ul class="pool-quota-card-features">
+                                <li><i data-lucide="check"></i> Bolão com 16.667 Jogos</li>
+                                <li><i data-lucide="check"></i> 16.667 Chances de Ganhar</li>
+                                <li><i data-lucide="check"></i> Máximo 50 Pessoas</li>
+                                <li><i data-lucide="check"></i> Acesso Imediato ao Grupo</li>
+                                <li><i data-lucide="check"></i> Comprovante de Apostas</li>
+                            </ul>
+                            <div class="pool-quota-card-highlight">
+                                <i data-lucide="star"></i>
+                                <span>Maiores chances de ganhar!</span>
+                            </div>
+                            <div class="pool-quota-card-price">
+                                <span class="pool-quota-card-value" id="pool-quota-price-10">R$ 1.000,00</span>
+                                <span class="pool-quota-card-installment">ou 12x de R$ 143,23</span>
+                                <span class="pool-quota-card-per-game">Apenas R$ 0,06 por jogo!</span>
+                            </div>
+                            <button type="button" class="pool-quota-card-btn pool-quota-card-btn-featured" onclick="selectQuotaAndConfirm(10)">
+                                <i data-lucide="trophy"></i>
+                                QUERO 10 COTAS!
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bet Success Modal -->
+        <div class="success-modal hidden" id="success-modal" role="dialog" aria-modal="true" aria-labelledby="success-modal-title">
+            <div class="success-modal-content">
+                <button class="success-modal-x" aria-label="Fechar" onclick="closeSuccessModal()">×</button>
+                <div class="success-modal-icon" aria-hidden="true">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M16.17 7.83 2 22"></path>
+                        <path d="M4.02 12a2.827 2.827 0 1 1 3.81-4.17A2.827 2.827 0 1 1 12 4.02a2.827 2.827 0 1 1 4.17 3.81A2.827 2.827 0 1 1 19.98 12a2.827 2.827 0 1 1-3.81 4.17A2.827 2.827 0 1 1 12 19.98a2.827 2.827 0 1 1-4.17-3.81A1 1 0 1 1 4 12"></path>
+                        <path d="m7.83 7.83 8.34 8.34"></path>
+                    </svg>
+                </div>
+                <h3 id="success-modal-title">Aposta confirmada!</h3>
+                <p id="success-modal-message">Aposta realizada com sucesso!</p>
+                <button class="success-modal-close" onclick="goToMyBets()">VER RESULTADOS</button>
+                <p class="success-modal-footer">Boa sorte 🍀</p>
+            </div>
+        </div>
+
+        <!-- PWA Install Modal (centrado com overlay) -->
+        <div class="pwa-install-overlay hidden" id="pwa-install-banner" onclick="if(event.target===this)document.getElementById('pwa-install-dismiss')?.click()">
+            <div class="pwa-install-card">
+                <button type="button" class="pwa-install-dismiss" id="pwa-install-dismiss" aria-label="Fechar">×</button>
+                <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="pwa-install-logo">
+                <p class="pwa-install-title">Instalar Loto Grana</p>
+                <p class="pwa-install-desc" id="pwa-install-desc">Use como app</p>
+                <button type="button" class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
+            </div>
+        </div>
+        <!-- Modal: Como instalar no iOS -->
+        <div class="pwa-ios-modal hidden" id="pwa-ios-modal" onclick="if(event.target===this)this.classList.add('hidden')">
+            <div class="pwa-ios-modal-content" onclick="event.stopPropagation()">
+                <h3>Como instalar no iPhone/iPad</h3>
+                <ol>
+                    <li>Toque no ícone <strong>Compartilhar</strong> (quadrado com seta) na barra de endereço do Safari</li>
+                    <li>Role até encontrar <strong>Adicionar à Tela de Início</strong></li>
+                    <li>Toque e confirme</li>
+                </ol>
+                <button type="button" class="pwa-ios-modal-close" onclick="document.getElementById('pwa-ios-modal').classList.add('hidden')">Entendi</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Termos de Uso -->
+    <div class="modal-overlay hidden" id="terms-modal" onclick="if(event.target===this)this.classList.add('hidden')">
+        <div class="modal-content legal-modal">
+            <div class="legal-modal-header">
+                <h2>Termos de Uso</h2>
+                <button class="modal-close-btn" onclick="document.getElementById('terms-modal').classList.add('hidden')">✕</button>
+            </div>
+            <div class="legal-modal-body">
+                <h3>1. Aceitação dos Termos</h3>
+                <p>Ao utilizar o LotoGrana, você concorda com estes termos de uso. O uso continuado da plataforma constitui aceitação das condições aqui descritas.</p>
+
+                <h3>2. Cadastro e Conta</h3>
+                <p>Para utilizar nossos serviços, é necessário criar uma conta fornecendo informações verdadeiras e completas. Você é responsável por manter a confidencialidade de suas credenciais.</p>
+
+                <h3>3. Apostas e Jogos</h3>
+                <p>O LotoGrana é uma plataforma de apostas em loterias oficiais. Os valores apostados são deduzidos do saldo da sua conta. Os resultados são verificados automaticamente com base nos sorteios oficiais.</p>
+
+                <h3>4. Depósitos e Saques</h3>
+                <p>Depósitos são realizados via PIX e creditados após confirmação. Saques passam por um processo de aprovação e são enviados para a chave PIX cadastrada. O valor mínimo para saque é de R$ 20,00.</p>
+
+                <h3>5. Responsabilidade</h3>
+                <p>O jogo deve ser uma atividade de entretenimento. Jogue com responsabilidade e nunca aposte mais do que pode perder. Se sentir que o jogo está se tornando um problema, procure ajuda.</p>
+
+                <h3>6. Privacidade</h3>
+                <p>Seus dados pessoais são tratados conforme nossa Política de Privacidade. Não compartilhamos informações com terceiros sem seu consentimento.</p>
+
+                <h3>7. Modificações</h3>
+                <p>Reservamo-nos o direito de alterar estes termos a qualquer momento. Alterações significativas serão comunicadas aos usuários.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Política de Privacidade -->
+    <div class="modal-overlay hidden" id="privacy-modal" onclick="if(event.target===this)this.classList.add('hidden')">
+        <div class="modal-content legal-modal">
+            <div class="legal-modal-header">
+                <h2>Política de Privacidade</h2>
+                <button class="modal-close-btn" onclick="document.getElementById('privacy-modal').classList.add('hidden')">✕</button>
+            </div>
+            <div class="legal-modal-body">
+                <h3>1. Dados Coletados</h3>
+                <p>Coletamos: nome, e-mail, telefone, dados de apostas e transações financeiras. Esses dados são necessários para o funcionamento da plataforma.</p>
+
+                <h3>2. Uso dos Dados</h3>
+                <p>Seus dados são utilizados para: gerenciar sua conta, processar apostas e transações, entrar em contato quando necessário e melhorar nossos serviços.</p>
+
+                <h3>3. Armazenamento</h3>
+                <p>Os dados são armazenados em servidores seguros com criptografia. Senhas são armazenadas com hash bcrypt e nunca em texto plano.</p>
+
+                <h3>4. Compartilhamento</h3>
+                <p>Não vendemos ou compartilhamos seus dados pessoais com terceiros, exceto quando exigido por lei ou para processamento de pagamentos.</p>
+
+                <h3>5. Seus Direitos</h3>
+                <p>Você tem direito a: acessar seus dados, solicitar correção, solicitar exclusão e revogar consentimento. Entre em contato com nosso suporte para exercer esses direitos.</p>
+
+                <h3>6. Cookies e Armazenamento Local</h3>
+                <p>Utilizamos localStorage para cache de dados e JWT tokens para autenticação. Não utilizamos cookies de rastreamento de terceiros.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ES Module Entry Point -->
+    <script type="module" src="js/main.js?v=232139213213"></script>
+    
+    
+    <script>
+        // Initialize Lucide icons after DOM loads
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Register Service Worker (path relativo para subpasta)
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then((registration) => {
+                        console.log('Service Worker registrado:', registration);
+                    })
+                    .catch((error) => {
+                        console.log('Erro ao registrar Service Worker:', error);
+                    });
+            }
+        });
+    </script>
+</body>
+</html>

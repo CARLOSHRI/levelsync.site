@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Loto Grana - Entrar</title>
+    <meta name="description" content="Entre com seu e-mail para começar a apostar.">
+    <meta name="theme-color" content="#005CA9">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Loto Grana">
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="apple-touch-icon" href="assets/icon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="page-cadastro">
+    <main class="main-content" id="main-content">
+        <div class="login-container">
+            <div class="login-card">
+                <!-- LOGIN -->
+                <div id="login-section">
+                    <div class="login-brand">
+                        <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="login-logo-brand">
+                        <span class="login-hint">Use o e-mail que você utilizou na compra</span>
+                    </div>
+                    <form class="login-form" onsubmit="handleLogin(event)">
+                        <label for="login-email">E-mail</label>
+                        <input id="login-email" type="email" placeholder="Digite seu e-mail..." autocomplete="email" required>
+                        <div class="login-error hidden" id="login-error"></div>
+                        <button type="submit" class="btn-login" id="btn-login">Entrar</button>
+                    </form>
+                    <p class="login-switch">
+                        Não tem conta? <button type="button" class="login-link" onclick="showCadastro()">Criar conta</button>
+                    </p>
+                    <button type="button" class="btn-instalar-app" onclick="openPwaInstallLogin()">
+                        <svg class="btn-instalar-app-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Instalar app
+                    </button>
+                </div>
+                <!-- CRIAR CONTA -->
+                <div id="cadastro-section" class="hidden">
+                    <button type="button" class="btn-voltar-login" onclick="showLogin()" aria-label="Voltar ao login">← Voltar</button>
+                    <div class="login-brand">
+                        <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="login-logo-brand">
+                        <p>Criar conta</p>
+                        <span class="login-hint">Preencha seus dados para começar</span>
+                    </div>
+                    <form class="login-form" onsubmit="handleCadastro(event)">
+                        <label for="cadastro-nome">Nome completo</label>
+                        <input id="cadastro-nome" type="text" placeholder="Seu nome completo" autocomplete="name" required>
+                        <label for="cadastro-email">E-mail</label>
+                        <input id="cadastro-email" type="email" placeholder="Digite seu e-mail..." autocomplete="email" required>
+                        <label for="cadastro-phone">Telefone (WhatsApp)</label>
+                        <input id="cadastro-phone" type="tel" placeholder="(11) 99999-9999" autocomplete="tel" required>
+                        <label for="cadastro-senha">Senha</label>
+                        <input id="cadastro-senha" type="password" placeholder="Mínimo 6 caracteres" autocomplete="new-password" minlength="6" required>
+                        <div class="login-error hidden" id="cadastro-error"></div>
+                        <button type="submit" class="btn-login" id="btn-cadastro">Criar conta</button>
+                    </form>
+                    <p class="login-switch">
+                        Já tem conta? <button type="button" class="login-link" onclick="showLogin()">Entrar</button>
+                    </p>
+                    <button type="button" class="btn-instalar-app" onclick="openPwaInstallLogin()">
+                        <svg class="btn-instalar-app-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        Instalar app
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PWA Install Modal (centrado com overlay) -->
+        <div class="pwa-install-overlay hidden" id="pwa-install-banner" onclick="if(event.target===this)document.getElementById('pwa-install-dismiss')?.click()">
+            <div class="pwa-install-card">
+                <button type="button" class="pwa-install-dismiss" id="pwa-install-dismiss" aria-label="Fechar">×</button>
+                <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="pwa-install-logo">
+                <p class="pwa-install-title">Instalar Loto Grana</p>
+                <p class="pwa-install-desc" id="pwa-install-desc">Use como app</p>
+                <button type="button" class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
+            </div>
+        </div>
+        <!-- Modal: Como instalar no iOS -->
+        <div class="pwa-ios-modal hidden" id="pwa-ios-modal" onclick="if(event.target===this)this.classList.add('hidden')">
+            <div class="pwa-ios-modal-content" onclick="event.stopPropagation()">
+                <h3>Como instalar no iPhone/iPad</h3>
+                <ol>
+                    <li>Toque no ícone <strong>Compartilhar</strong> (quadrado com seta) na barra de endereço do Safari</li>
+                    <li>Role até encontrar <strong>Adicionar à Tela de Início</strong></li>
+                    <li>Toque e confirme</li>
+                </ol>
+                <button type="button" class="pwa-ios-modal-close" onclick="document.getElementById('pwa-ios-modal').classList.add('hidden')">Entendi</button>
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { apiLogin, apiRegister, isAuthenticated } from './js/api-client.js';
+        import { AUTH_REQUIRED } from './js/core/config.js';
+        import { initPwaInstall, canShowInstallPrompt, showInstallPrompt, dismissInstallPrompt, wasInstallDismissed, isIOS, isStandalone } from './js/utils/pwa-install.js';
+
+        if (!AUTH_REQUIRED) {
+            window.location.href = 'index.html';
+        }
+
+        if (isAuthenticated()) {
+            window.location.href = 'index.html';
+        }
+
+        initPwaInstall();
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(() => {});
+        }
+
+        function showPwaBanner() {
+            if (isStandalone() || wasInstallDismissed()) return;
+            const banner = document.getElementById('pwa-install-banner');
+            const btn = document.getElementById('pwa-install-btn');
+            const desc = document.getElementById('pwa-install-desc');
+            const iosModal = document.getElementById('pwa-ios-modal');
+            if (!banner) return;
+
+            if (isIOS()) {
+                desc.textContent = 'Adicione à tela inicial';
+                btn.textContent = 'Como instalar';
+                btn.onclick = () => { if (iosModal) iosModal.classList.remove('hidden'); };
+            } else if (canShowInstallPrompt()) {
+                desc.textContent = 'Use como app';
+                btn.textContent = 'Instalar';
+                btn.onclick = () => showInstallPrompt();
+            } else {
+                return;
+            }
+            banner.classList.remove('hidden');
+        }
+
+        document.getElementById('pwa-install-dismiss')?.addEventListener('click', () => {
+            document.getElementById('pwa-install-banner')?.classList.add('hidden');
+            dismissInstallPrompt();
+        });
+
+        window.addEventListener('pwa-install-available', showPwaBanner);
+        if (canShowInstallPrompt()) showPwaBanner();
+        else if (isIOS() && !isStandalone()) setTimeout(showPwaBanner, 1500);
+
+        window.openPwaInstallLogin = function() {
+            if (isStandalone()) return;
+            const banner = document.getElementById('pwa-install-banner');
+            const btn = document.getElementById('pwa-install-btn');
+            const desc = document.getElementById('pwa-install-desc');
+            const iosModal = document.getElementById('pwa-ios-modal');
+            if (!banner) return;
+            if (isIOS()) {
+                desc.textContent = 'Adicione à tela inicial';
+                btn.textContent = 'Como instalar';
+                btn.onclick = () => { if (iosModal) iosModal.classList.remove('hidden'); };
+            } else if (canShowInstallPrompt()) {
+                desc.textContent = 'Use como app';
+                btn.textContent = 'Instalar';
+                btn.onclick = () => showInstallPrompt();
+            } else {
+                if (isIOS() && iosModal) iosModal.classList.remove('hidden');
+                return;
+            }
+            banner.classList.remove('hidden');
+        };
+
+        window.showLogin = function() {
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('cadastro-section').classList.add('hidden');
+            document.querySelectorAll('.login-error').forEach(el => el.classList.add('hidden'));
+        };
+
+        window.showCadastro = function() {
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('cadastro-section').classList.remove('hidden');
+            document.querySelectorAll('.login-error').forEach(el => el.classList.add('hidden'));
+        };
+
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email')?.value?.trim();
+            const errorEl = document.getElementById('login-error');
+            const btn = document.getElementById('btn-login');
+
+            if (!email) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+
+            try {
+                await apiLogin(email);
+                window.location.href = 'index.html';
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Entrar';
+                showError(errorEl, err.message);
+            }
+        };
+
+        window.handleCadastro = async function(event) {
+            event.preventDefault();
+            const nome = document.getElementById('cadastro-nome')?.value?.trim();
+            const email = document.getElementById('cadastro-email')?.value?.trim();
+            const phone = document.getElementById('cadastro-phone')?.value?.trim();
+            const senha = document.getElementById('cadastro-senha')?.value;
+            const errorEl = document.getElementById('cadastro-error');
+            const btn = document.getElementById('btn-cadastro');
+
+            if (!nome || !email || !senha || !phone) return;
+
+            btn.disabled = true;
+            btn.textContent = 'Criando conta...';
+
+            try {
+                await apiRegister(nome, email, senha, phone);
+                window.location.href = 'index.html';
+            } catch (err) {
+                btn.disabled = false;
+                btn.textContent = 'Criar conta';
+                showError(errorEl, err.message);
+            }
+        };
+
+        function showError(el, msg) {
+            if (!el) return;
+            el.textContent = msg;
+            el.classList.remove('hidden');
+        }
+
+        document.querySelectorAll('.login-form input').forEach(input => {
+            input.addEventListener('focus', function() {
+                setTimeout(() => this.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+            });
+        });
+    </script>
+</body>
+</html>

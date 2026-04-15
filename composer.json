@@ -1,0 +1,13 @@
+{
+    "name": "lotograna/app",
+    "description": "LotoGrana - Apostas e Gestão de Loterias",
+    "require": {
+        "php": ">=7.4",
+        "minishlink/web-push": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "LotoGrana\\": "api/"
+        }
+    }
+}

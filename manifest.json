@@ -1,0 +1,36 @@
+{
+  "name": "Loto Grana",
+  "short_name": "Loto Grana",
+  "description": "Apostas e Gestão de Loterias com IA - Mega Sena, LotoFácil e Quina",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "background_color": "#0A0A0A",
+  "theme_color": "#005CA9",
+  "orientation": "portrait-primary",
+  "categories": ["entertainment", "finance"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "assets/icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": []
+}

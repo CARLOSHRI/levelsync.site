@@ -1,0 +1,12 @@
+{
+  "name": "loto-grana",
+  "version": "1.0.0",
+  "main": "index.js",
+  "description": "Apostas e Gestão de Loterias com IA",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": ["loteria", "apostas", "ia", "mega-sena", "lotofacil", "quina"],
+  "author": "LotoGrana",
+  "license": "ISC"
+}

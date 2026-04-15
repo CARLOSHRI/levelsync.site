@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LotoGrana - Admin</title>
+    <link rel="icon" type="image/png" href="assets/icon.png">
+    <link rel="stylesheet" href="admin-styles.css">
+    <script>
+        // Modo Demo - script inline (sempre disponível)
+        window.enterDemoMode = function() {
+            window._demoRequested = true;
+            document.dispatchEvent(new CustomEvent('admin-enter-demo'));
+            // Fallback: tenta em 100ms e 400ms (caso o módulo carregue com atraso)
+            function tryDemo() {
+                if (!window._demoRequested) return;
+                var app = document.getElementById('admin-app');
+                var login = document.getElementById('admin-login');
+                if (!app || !login) return;
+                if (typeof window._enterDemoModeImpl === 'function') {
+                    window._enterDemoModeImpl();
+                    window._demoRequested = false;
+                } else if (app.style.display === 'none') {
+                    login.style.display = 'none';
+                    app.style.display = 'flex';
+                }
+            }
+            setTimeout(tryDemo, 100);
+            setTimeout(tryDemo, 400);
+            setTimeout(tryDemo, 800);
+        };
+    </script>
+</head>
+<body>
+
+    <!-- ==================== LOGIN ==================== -->
+    <div id="admin-login" class="admin-login-overlay">
+        <div class="admin-login-card">
+            <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="admin-login-logo">
+            <h1>Painel Admin</h1>
+            <p class="subtitle">LotoGrana - Acesso restrito</p>
+            <form id="admin-login-form">
+                <label>E-mail</label>
+                <input type="email" id="admin-email" placeholder="admin@lotograna.com" required>
+                <label>Senha</label>
+                <input type="password" id="admin-password" placeholder="Sua senha" required>
+                <button type="submit" class="admin-login-btn" id="admin-login-btn">Entrar</button>
+                <div class="admin-login-error hidden" id="admin-login-error"></div>
+            </form>
+            <div style="text-align:center;margin-top:16px;border-top:1px solid #2a2a2a;padding-top:16px;">
+                <button type="button" class="admin-login-btn" id="admin-demo-btn" style="background:#3b82f6;" onclick="window.enterDemoMode()">Entrar em Modo Demo</button>
+                <p style="font-size:11px;color:#666;margin-top:8px;">Visualize a interface com dados fictícios</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DASHBOARD LAYOUT ==================== -->
+    <div id="admin-app" class="admin-layout" style="display:none;">
+        <!-- Botão menu mobile (hamburger) -->
+        <button type="button" class="admin-mobile-menu-btn" id="admin-mobile-menu-btn" onclick="toggleAdminSidebar()" aria-label="Abrir menu">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24" height="24"><path d="M3 12h18"/><path d="M3 6h18"/><path d="M3 18h18"/></svg>
+        </button>
+        <!-- Overlay para fechar sidebar no mobile -->
+        <div class="admin-sidebar-overlay hidden" id="admin-sidebar-overlay" onclick="toggleAdminSidebar()"></div>
+        <!-- Sidebar -->
+        <aside class="admin-sidebar" id="admin-sidebar">
+            <div class="admin-sidebar-brand">
+                <img src="assets/logo-sem-fundo.png" alt="Loto Grana" class="admin-sidebar-logo">
+                <h2>LotoGrana</h2>
+                <div class="admin-brand-row">
+                    <span>Painel Administrativo</span>
+                    <span class="admin-mode-badge" id="admin-mode-badge">Online</span>
+                </div>
+                <button type="button" class="admin-refresh-btn" onclick="refreshAdminData()" title="Atualizar dados">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+                    Atualizar dados
+                </button>
+            </div>
+            <nav class="admin-sidebar-nav">
+                <button class="admin-nav-item active" data-section="stats" onclick="showSection('stats')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                    Estatísticas
+                </button>
+                <button class="admin-nav-item" data-section="users" onclick="showSection('users')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                    Usuários
+                </button>
+                <button class="admin-nav-item" data-section="deposits" onclick="showSection('deposits')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                    Depósitos
+                </button>
+                <button class="admin-nav-item" data-section="pools" onclick="showSection('pools')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                    Bolões
+                </button>
+                <button class="admin-nav-item" data-section="bets" onclick="showSection('bets')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
+                    Apostas
+                </button>
+                <button class="admin-nav-item" data-section="withdrawals" onclick="showSection('withdrawals')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Saques
+                </button>
+                <button class="admin-nav-item" data-section="transactions" onclick="showSection('transactions')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 17V9"/><path d="M13 17V5"/><path d="M8 17v-3"/></svg>
+                    Transações
+                </button>
+                <button class="admin-nav-item" data-section="notifications" onclick="showSection('notifications')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                    Notificações
+                </button>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <button class="admin-reset-btn" onclick="openResetModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                    Resetar dados
+                </button>
+                <button class="admin-logout-btn" onclick="adminLogout()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    Sair
+                </button>
+            </div>
+        </aside>
+
+        <!-- Notification Bell + Panel -->
+        <div class="admin-notif-bell" id="admin-notif-bell" onclick="toggleNotifPanel()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="22" height="22"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            <span class="admin-notif-badge hidden" id="admin-notif-badge">0</span>
+        </div>
+        <div class="admin-notif-panel hidden" id="admin-notif-panel">
+            <div class="admin-notif-header">
+                <h4>Notificações</h4>
+                <button class="admin-notif-clear" onclick="clearNotifications()">Limpar</button>
+            </div>
+            <div class="admin-notif-list" id="admin-notif-list">
+                <div class="admin-notif-empty">Nenhuma notificação</div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="admin-main">
+            <!-- ===== STATS ===== -->
+            <div id="section-stats" class="admin-section active">
+                <div class="admin-header">
+                    <h1>Visão Geral</h1>
+                    <span class="admin-header-info" id="stats-date"></span>
+                </div>
+                <div class="stats-date-filter">
+                    <div class="stats-date-inputs">
+                        <label>De:</label>
+                        <input type="date" id="stats-filter-start" onchange="applyStatsDateFilter()">
+                        <label>Até:</label>
+                        <input type="date" id="stats-filter-end" onchange="applyStatsDateFilter()">
+                        <button class="btn-sm btn-outline" onclick="clearStatsDateFilter()">Limpar</button>
+                    </div>
+                </div>
+                <div class="stats-grid" id="stats-cards">
+                    <div class="stat-card"><div class="stat-card-label">Total de Usuários</div><div class="stat-card-value green" id="stat-users">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Saldo Total na Plataforma</div><div class="stat-card-value blue" id="stat-balance">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Total de Apostas</div><div class="stat-card-value yellow" id="stat-bets">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Apostas Ganhas</div><div class="stat-card-value green" id="stat-bets-won">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Apostas Perdidas</div><div class="stat-card-value" style="color:var(--admin-red);" id="stat-bets-lost">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Bolões Ativos</div><div class="stat-card-value purple" id="stat-pools">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Depósitos Confirmados</div><div class="stat-card-value green" id="stat-deposits-completed">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Depósitos Pendentes</div><div class="stat-card-value yellow" id="stat-deposits-pending">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Saques Pendentes</div><div class="stat-card-value yellow" id="stat-withdrawals-pending">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Total Apostado</div><div class="stat-card-value blue" id="stat-total-bet-value">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Total Prêmios Pagos</div><div class="stat-card-value" style="color:var(--admin-red);" id="stat-total-prizes">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Lucro da Plataforma</div><div class="stat-card-value green" id="stat-profit">-</div></div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Últimos Usuários Cadastrados</h3></div>
+                    <table class="admin-table">
+                        <thead><tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Saldo</th><th>Data</th></tr></thead>
+                        <tbody id="stats-recent-users"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ===== USERS ===== -->
+            <div id="section-users" class="admin-section">
+                <div class="admin-header">
+                    <h1>Usuários</h1>
+                    <button class="btn-primary" style="background:var(--admin-blue);" onclick="exportCSV('users')">Exportar CSV</button>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Lista de Usuários</h3>
+                        <input type="text" class="admin-search" placeholder="Buscar por nome ou e-mail..." id="users-search" oninput="filterUsers()">
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Nome</th><th>E-mail</th><th>Telefone</th><th>Saldo</th><th>Status</th><th>Cadastro</th><th>Ações</th></tr></thead>
+                        <tbody id="users-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="users-empty">Nenhum usuário encontrado.</div>
+                </div>
+            </div>
+
+            <!-- ===== DEPOSITS ===== -->
+            <div id="section-deposits" class="admin-section">
+                <div class="admin-header">
+                    <h1>Depósitos</h1>
+                </div>
+                <!-- Totais -->
+                <div class="stats-grid" id="deposits-stats">
+                    <div class="stat-card"><div class="stat-card-label">Total Depositado (Confirmado)</div><div class="stat-card-value green" id="dep-total-completed">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Pendentes</div><div class="stat-card-value yellow" id="dep-total-pending">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Confirmados</div><div class="stat-card-value blue" id="dep-count-completed">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Expirados / Cancelados</div><div class="stat-card-value" style="color:#999;" id="dep-count-expired">-</div></div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Lista de Depósitos</h3>
+                        <input type="text" class="admin-search" placeholder="Buscar por usuário, e-mail ou telefone..." id="deposits-search" oninput="filterDepositsSearch()">
+                        <div class="admin-filters">
+                            <button class="admin-filter-btn active" onclick="filterDepositsAdmin('all')">Todos</button>
+                            <button class="admin-filter-btn" onclick="filterDepositsAdmin('PENDING')">Pendentes</button>
+                            <button class="admin-filter-btn" onclick="filterDepositsAdmin('COMPLETED')">Confirmados</button>
+                            <button class="admin-filter-btn" onclick="filterDepositsAdmin('EXPIRED')">Expirados</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Usuário</th><th>Valor</th><th>Status</th><th>Creditado</th><th>Data</th><th>Ações</th></tr></thead>
+                        <tbody id="deposits-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="deposits-empty">Nenhum depósito encontrado.</div>
+                </div>
+            </div>
+
+            <!-- ===== POOLS ===== -->
+            <div id="section-pools" class="admin-section">
+                <div class="admin-header">
+                    <h1>Bolões</h1>
+                    <button class="btn-primary" onclick="openPoolModal()">+ Criar Bolão</button>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Bolões Cadastrados</h3>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Nome</th><th>Loteria</th><th>Cotas</th><th>Preço/Cota</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="pools-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="pools-empty">Nenhum bolão cadastrado.</div>
+                </div>
+            </div>
+
+            <!-- ===== BETS ===== -->
+            <div id="section-bets" class="admin-section">
+                <div class="admin-header">
+                    <h1>Apostas</h1>
+                    <button class="btn-primary" style="background:var(--admin-blue);" onclick="exportCSV('bets')">Exportar CSV</button>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Todas as Apostas</h3>
+                        <input type="text" class="admin-search" placeholder="Buscar por usuário ou loteria..." id="bets-search" oninput="filterBetsAdmin(currentBetFilter)">
+                        <div class="admin-filters">
+                            <button class="admin-filter-btn active" onclick="filterBetsAdmin('all')">Todas</button>
+                            <button class="admin-filter-btn" onclick="filterBetsAdmin('active')">Ativas</button>
+                            <button class="admin-filter-btn" onclick="filterBetsAdmin('won')">Ganhou</button>
+                            <button class="admin-filter-btn" onclick="filterBetsAdmin('lost')">Perdeu</button>
+                            <button class="admin-filter-btn" onclick="filterBetsAdmin('topPrizes')">Maiores prêmios</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Usuário</th><th>Loteria</th><th>Números</th><th>Valor</th><th>Prêmio</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
+                        <tbody id="bets-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="bets-empty">Nenhuma aposta encontrada.</div>
+                </div>
+            </div>
+
+            <!-- ===== WITHDRAWALS ===== -->
+            <div id="section-withdrawals" class="admin-section">
+                <div class="admin-header">
+                    <h1>Saques</h1>
+                    <button class="btn-primary" style="background:var(--admin-blue);" onclick="exportCSV('withdrawals')">Exportar CSV</button>
+                </div>
+                <div class="stats-grid" id="withdrawals-stats">
+                    <div class="stat-card"><div class="stat-card-label">Saques Pendentes</div><div class="stat-card-value yellow" id="wd-pending">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Valor Pendente</div><div class="stat-card-value yellow" id="wd-pending-amount">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Saques Aprovados</div><div class="stat-card-value green" id="wd-approved">-</div></div>
+                    <div class="stat-card"><div class="stat-card-label">Saques Rejeitados</div><div class="stat-card-value" style="color:#999;" id="wd-rejected">-</div></div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Solicitações de Saque</h3>
+                        <div class="admin-filters">
+                            <button class="admin-filter-btn active" onclick="filterWithdrawals('all')">Todos</button>
+                            <button class="admin-filter-btn" onclick="filterWithdrawals('pending')">Pendentes</button>
+                            <button class="admin-filter-btn" onclick="filterWithdrawals('approved')">Aprovados</button>
+                            <button class="admin-filter-btn" onclick="filterWithdrawals('rejected')">Rejeitados</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Usuário</th><th>Valor</th><th>Chave PIX</th><th>Contato</th><th>Status</th><th>Data</th><th>Ações</th></tr></thead>
+                        <tbody id="withdrawals-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="withdrawals-empty">Nenhum saque encontrado.</div>
+                </div>
+            </div>
+
+            <!-- ===== TRANSACTIONS ===== -->
+            <div id="section-transactions" class="admin-section">
+                <div class="admin-header">
+                    <h1>Transações</h1>
+                    <button class="btn-primary" style="background:var(--admin-blue);" onclick="exportCSV('transactions')">Exportar CSV</button>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3>Histórico de Transações</h3>
+                        <div class="admin-filters">
+                            <button class="admin-filter-btn active" onclick="filterTxAdmin('all')">Todas</button>
+                            <button class="admin-filter-btn" onclick="filterTxAdmin('deposit')">Depósitos</button>
+                            <button class="admin-filter-btn" onclick="filterTxAdmin('withdraw')">Saques</button>
+                            <button class="admin-filter-btn" onclick="filterTxAdmin('bet')">Apostas</button>
+                        </div>
+                    </div>
+                    <table class="admin-table">
+                        <thead><tr><th>Usuário</th><th>Tipo</th><th>Valor</th><th>Detalhes</th><th>Data</th></tr></thead>
+                        <tbody id="tx-table-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="tx-empty">Nenhuma transação encontrada.</div>
+                </div>
+            </div>
+
+            <!-- ===== NOTIFICAÇÕES PUSH ===== -->
+            <div id="section-notifications" class="admin-section">
+                <div class="admin-header">
+                    <h1>Notificações Push</h1>
+                    <span class="admin-header-info" id="notif-subscribers-count">0 usuários com push ativo</span>
+                </div>
+                <div class="stats-grid" id="notif-stats">
+                    <div class="stat-card"><div class="stat-card-label">Usuários com Push Ativo</div><div class="stat-card-value blue" id="notif-push-count">0</div></div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Enviar Notificação</h3></div>
+                    <div class="admin-notif-form">
+                        <div class="admin-notif-row">
+                            <label>Título</label>
+                            <input type="text" id="notif-title" placeholder="Ex: Sorteio da Mega-Sena saiu!">
+                        </div>
+                        <div class="admin-notif-row">
+                            <label>Corpo da mensagem</label>
+                            <textarea id="notif-body" rows="3" placeholder="Ex: Confira os resultados do concurso 2977"></textarea>
+                        </div>
+                        <div class="admin-notif-actions">
+                            <button type="button" class="btn-primary btn-green" onclick="sendNotificationNow()">Enviar agora</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Agendar Notificação</h3></div>
+                    <div class="admin-notif-form">
+                        <div class="admin-notif-row">
+                            <label>Data e hora</label>
+                            <input type="datetime-local" id="notif-scheduled-at">
+                        </div>
+                        <div class="admin-notif-row">
+                            <label>Título</label>
+                            <input type="text" id="notif-sched-title" placeholder="Título da notificação">
+                        </div>
+                        <div class="admin-notif-row">
+                            <label>Corpo</label>
+                            <textarea id="notif-sched-body" rows="2" placeholder="Mensagem"></textarea>
+                        </div>
+                        <div class="admin-notif-actions">
+                            <button type="button" class="btn-primary" onclick="scheduleNotification()">Agendar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Notificação Recorrente (Dias de Sorteio)</h3></div>
+                    <p class="admin-notif-hint">Envia automaticamente nos dias de sorteio da loteria escolhida, no horário configurado.</p>
+                    <div class="admin-notif-form">
+                        <div class="admin-notif-row">
+                            <label>Loteria</label>
+                            <select id="notif-recur-lottery">
+                                <option value="megasena">Mega-Sena (ter/qui/sáb)</option>
+                                <option value="lotofacil">LotoFácil (seg-sáb)</option>
+                                <option value="quina">Quina (seg-sáb)</option>
+                            </select>
+                        </div>
+                        <div class="admin-notif-row admin-notif-row-inline">
+                            <label>Horário</label>
+                            <input type="number" id="notif-recur-hour" placeholder="21" min="0" max="23" value="21" style="width:60px;">
+                            <span>:</span>
+                            <input type="number" id="notif-recur-minute" placeholder="5" min="0" max="59" value="5" style="width:60px;">
+                        </div>
+                        <div class="admin-notif-row">
+                            <label>Título</label>
+                            <input type="text" id="notif-recur-title" placeholder="Ex: Sorteio da Mega-Sena saiu!">
+                        </div>
+                        <div class="admin-notif-row">
+                            <label>Corpo</label>
+                            <textarea id="notif-recur-body" rows="2" placeholder="Ex: Confira os resultados no app"></textarea>
+                        </div>
+                        <div class="admin-notif-actions">
+                            <button type="button" class="btn-primary btn-green" onclick="createRecurringNotification()">Criar recorrente</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-card">
+                    <div class="admin-card-header"><h3>Agendamentos</h3></div>
+                    <table class="admin-table">
+                        <thead><tr><th>Título</th><th>Tipo</th><th>Data/Hora</th><th>Status</th><th>Ações</th></tr></thead>
+                        <tbody id="notif-schedules-body"></tbody>
+                    </table>
+                    <div class="admin-empty hidden" id="notif-schedules-empty">Nenhum agendamento.</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+    <!-- Modal: Resetar Dados -->
+    <div class="admin-modal-overlay hidden" id="modal-reset">
+        <div class="admin-modal">
+            <h3>Resetar Dados</h3>
+            <p class="admin-reset-warning">Esta ação irá recarregar todos os dados do painel. No modo demo, os dados fictícios serão restaurados. No modo API, os dados serão buscados novamente do servidor.</p>
+            <label>Digite <strong>resetar</strong> para confirmar:</label>
+            <input type="text" id="modal-reset-confirm" placeholder="Digite resetar" autocomplete="off" oninput="checkResetConfirm()">
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-reset')">Cancelar</button>
+                <button class="btn-sm btn-red" id="modal-reset-btn" onclick="confirmReset()" disabled>Resetar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Ajustar Saldo -->
+    <div class="admin-modal-overlay hidden" id="modal-balance">
+        <div class="admin-modal">
+            <h3>Ajustar Saldo</h3>
+            <p style="font-size:13px;color:#999;margin-bottom:12px;" id="modal-balance-user"></p>
+            <label>Valor (R$)</label>
+            <input type="number" id="modal-balance-amount" placeholder="Ex: 50.00 ou -20.00" step="0.01">
+            <label>Motivo</label>
+            <input type="text" id="modal-balance-reason" placeholder="Ex: Bônus de cadastro">
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-balance')">Cancelar</button>
+                <button class="btn-sm btn-green" onclick="confirmBalanceAdjust()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Criar/Editar Bolão -->
+    <div class="admin-modal-overlay hidden" id="modal-pool">
+        <div class="admin-modal">
+            <h3 id="modal-pool-title">Criar Bolão</h3>
+            <input type="hidden" id="modal-pool-id">
+            <label>Nome do Bolão</label>
+            <input type="text" id="modal-pool-name" placeholder="Ex: Bolão da Sorte">
+            <label>Loteria</label>
+            <select id="modal-pool-lottery">
+                <option value="megasena">Mega Sena</option>
+                <option value="lotofacil">LotoFácil</option>
+                <option value="quina">Quina</option>
+            </select>
+            <label>Total de Cotas</label>
+            <input type="number" id="modal-pool-spots" placeholder="Ex: 50" min="2">
+            <label>Preço por Cota (R$)</label>
+            <input type="number" id="modal-pool-price" placeholder="Ex: 25.00" step="0.01" min="1">
+            <label>Números (separados por vírgula)</label>
+            <input type="text" id="modal-pool-numbers" placeholder="Ex: 4, 17, 23, 35, 42, 58">
+            <label>Data do Sorteio</label>
+            <input type="date" id="modal-pool-date">
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-pool')">Cancelar</button>
+                <button class="btn-sm btn-green" onclick="confirmPool()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Detalhes do Usuário -->
+    <div class="admin-modal-overlay hidden" id="modal-user-detail">
+        <div class="admin-modal" style="max-width:600px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3>Detalhes do Usuário</h3>
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-user-detail')">Fechar</button>
+            </div>
+            <div id="modal-user-detail-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Participantes do Bolão -->
+    <div class="admin-modal-overlay hidden" id="modal-pool-participants">
+        <div class="admin-modal" style="max-width:500px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                <h3>Participantes</h3>
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-pool-participants')">Fechar</button>
+            </div>
+            <div id="modal-pool-participants-content"></div>
+        </div>
+    </div>
+
+    <!-- Modal: Ações do Usuário -->
+    <div class="admin-modal-overlay hidden" id="modal-user-actions">
+        <div class="admin-modal" style="max-width:360px;">
+            <h3 id="modal-user-actions-title">Ações</h3>
+            <p style="font-size:13px;color:#999;margin-bottom:16px;" id="modal-user-actions-subtitle"></p>
+            <div class="admin-modal-actions-grid">
+                <button class="btn-sm btn-blue" onclick="fromUserActions('detail')">Detalhes</button>
+                <button class="btn-sm btn-green" onclick="fromUserActions('balance')">Saldo</button>
+                <button class="btn-sm btn-outline" onclick="fromUserActions('edit')">Editar</button>
+                <button class="btn-sm btn-red" id="modal-user-actions-block-btn" onclick="fromUserActions('block')" style="display:none;">Bloquear</button>
+                <button class="btn-sm btn-green" id="modal-user-actions-unblock-btn" onclick="fromUserActions('unblock')" style="display:none;">Desbloquear</button>
+            </div>
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-user-actions')">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Usuário -->
+    <div class="admin-modal-overlay hidden" id="modal-edit-user">
+        <div class="admin-modal">
+            <h3>Editar Usuário</h3>
+            <input type="hidden" id="modal-edit-user-id">
+            <label>Nome</label>
+            <input type="text" id="modal-edit-user-name" placeholder="Nome completo">
+            <label>E-mail</label>
+            <input type="email" id="modal-edit-user-email" placeholder="email@exemplo.com">
+            <label>Telefone</label>
+            <input type="tel" id="modal-edit-user-phone" placeholder="(11) 99999-9999">
+            <label>Papel</label>
+            <select id="modal-edit-user-role">
+                <option value="user">Usuário</option>
+                <option value="admin">Administrador</option>
+            </select>
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-edit-user')">Cancelar</button>
+                <button class="btn-sm btn-green" onclick="confirmEditUser()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Editar Aposta -->
+    <div class="admin-modal-overlay hidden" id="modal-edit-bet">
+        <div class="admin-modal">
+            <h3>Editar Aposta</h3>
+            <input type="hidden" id="modal-edit-bet-id">
+            <p style="font-size:13px;color:#999;margin-bottom:12px;" id="modal-edit-bet-info"></p>
+            <label>Status</label>
+            <select id="modal-edit-bet-status">
+                <option value="active">Ativa</option>
+                <option value="won">Ganhou</option>
+                <option value="lost">Perdeu</option>
+            </select>
+            <label>Valor (R$)</label>
+            <input type="number" id="modal-edit-bet-value" step="0.01" min="0">
+            <label>Prêmio (R$) — deixe vazio se não ganhou</label>
+            <input type="number" id="modal-edit-bet-prize" step="0.01" min="0" placeholder="0.00">
+            <label>Acertos</label>
+            <input type="number" id="modal-edit-bet-hits" min="0" placeholder="0">
+            <div class="admin-modal-actions">
+                <button class="btn-sm btn-outline" onclick="closeModal('modal-edit-bet')">Cancelar</button>
+                <button class="btn-sm btn-green" onclick="confirmEditBet()">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/admin/admin-app.js"></script>
+</body>
+</html>
