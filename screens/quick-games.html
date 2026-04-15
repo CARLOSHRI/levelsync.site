@@ -1,0 +1,138 @@
+<div id="screen-quick-games" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('home')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2 id="qg-header-title">Jogos do Dia</h2>
+    </div>
+
+    <!-- Seletor de loteria (visível quando entra pelo menu, sem loteria) -->
+    <section class="section qg-lottery-picker" id="qg-lottery-picker">
+        <h2 class="section-title section-title-centered">
+            <i data-lucide="ticket"></i>
+            Escolha sua Loteria
+        </h2>
+        <div class="games-grid">
+            <div class="game-card" onclick="selectQgLottery('lotofacil')">
+                <div class="game-card-header lotofacil-header">
+                    <img src="assets/lotofacil.png" alt="LotoFácil" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize lotofacil-prize" id="qg-picker-prize-lotofacil">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="qg-picker-contest-lotofacil">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="qg-picker-draw-lotofacil">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="qg-picker-countdown-lotofacil">⏰ Carregando...</div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); selectQgLottery('lotofacil')">JOGOS DO DIA</button>
+            </div>
+            <div class="game-card" onclick="selectQgLottery('megasena')">
+                <div class="game-card-header megasena-header">
+                    <img src="assets/megasena.png" alt="Mega Sena" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize megasena-prize" id="qg-picker-prize-megasena">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="qg-picker-contest-megasena">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="qg-picker-draw-megasena">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="qg-picker-countdown-megasena">⏰ Carregando...</div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); selectQgLottery('megasena')">JOGOS DO DIA</button>
+            </div>
+            <div class="game-card" onclick="selectQgLottery('quina')">
+                <div class="game-card-header quina-header">
+                    <img src="assets/quina.png" alt="Quina" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize quina-prize" id="qg-picker-prize-quina">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="qg-picker-contest-quina">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="qg-picker-draw-quina">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="qg-picker-countdown-quina">⏰ Carregando...</div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); selectQgLottery('quina')">JOGOS DO DIA</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo (visível quando loteria selecionada) -->
+    <section class="section qg-content hidden" id="qg-content">
+        <div class="game-card qg-info-card-wrapper" id="qg-info-card">
+            <div class="game-card-header lotofacil-header" id="qg-info-header">
+                <img src="assets/lotofacil.png" alt="Loteria" class="game-logo" id="qg-info-logo">
+            </div>
+            <div class="game-card-body">
+                <span class="game-card-prize lotofacil-prize" id="qg-info-prize">Carregando...</span>
+                <div class="game-card-details">
+                    <span class="game-card-contest">Concurso: <strong id="qg-info-contest">---</strong></span>
+                    <span class="game-card-draw">Sorteio: <strong id="qg-info-draw">---</strong></span>
+                </div>
+            </div>
+            <div class="game-card-countdown" id="qg-info-countdown">⏰ Carregando...</div>
+        </div>
+
+        <div class="qg-tabs" id="qg-tabs">
+            <button class="qg-tab active" data-tab="games" onclick="switchQgTab('games')">
+                <i data-lucide="clover"></i>
+                <span>Jogos do Dia</span>
+            </button>
+            <button class="qg-tab" data-tab="results" onclick="switchQgTab('results')">
+                <i data-lucide="scroll-text"></i>
+                <span>Resultados</span>
+            </button>
+        </div>
+
+        <div class="qg-results-filter hidden" id="qg-results-filter">
+            <button class="filter-btn active" onclick="filterQgResults('active')" data-filter="active">
+                <i data-lucide="clock"></i>
+                <span>Ativas</span>
+            </button>
+            <button class="filter-btn" onclick="filterQgResults('won')" data-filter="won">
+                <i data-lucide="trophy"></i>
+                <span>Ganhou</span>
+            </button>
+            <button class="filter-btn" onclick="filterQgResults('lost')" data-filter="lost">
+                <i data-lucide="x-circle"></i>
+                <span>Perdeu</span>
+            </button>
+        </div>
+
+        <div class="qg-tab-panel" id="qg-panel-games">
+            <div class="qg-games-list" id="qg-games-list">
+                <!-- Jogos serão renderizados via JS -->
+            </div>
+        </div>
+
+        <div class="qg-tab-panel hidden" id="qg-panel-results">
+            <div class="qg-results-list bets-list" id="qg-results-list">
+                <!-- Apostas da loteria serão renderizadas via JS -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de confirmação -->
+    <div id="quick-bet-modal" class="quick-bet-modal hidden">
+        <div class="quick-bet-modal-content">
+            <div class="quick-bet-modal-header-new">
+                <button class="quick-bet-close-new" onclick="closeQuickBetModal()">
+                    <i data-lucide="x"></i>
+                </button>
+                <img id="quick-bet-logo" src="" alt="Loteria" class="quick-bet-logo-centered">
+                <span class="quick-bet-game-title" id="quick-bet-game-title">Mais Sorteados</span>
+            </div>
+            <div class="quick-bet-modal-body-new">
+                <div class="quick-bet-numbers-new" id="quick-bet-numbers"></div>
+                <div class="quick-bet-value-new">
+                    <span>Valor da aposta:</span>
+                    <strong id="quick-bet-price">R$ 0,00</strong>
+                </div>
+            </div>
+            <div class="quick-bet-modal-footer-new">
+                <button class="btn-confirm-quick-new" onclick="confirmQuickBet()">CONFIRMAR APOSTA</button>
+            </div>
+        </div>
+    </div>
+</div>

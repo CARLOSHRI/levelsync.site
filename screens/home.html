@@ -1,0 +1,81 @@
+<div id="screen-home" class="screen">
+    <section class="section">
+        <h2 class="section-title section-title-centered">
+            <i data-lucide="ticket"></i>
+            Escolha sua Loteria
+        </h2>
+        <div class="games-grid">
+            <!-- LotoFácil -->
+            <div class="game-card" onclick="goToQuickGames('lotofacil')">
+                <div class="game-card-header lotofacil-header">
+                    <img src="assets/lotofacil.png" alt="LotoFácil" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize lotofacil-prize" id="prize-lotofacil">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="contest-lotofacil">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="draw-lotofacil">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="countdown-lotofacil">
+                    ⏰ Carregando...
+                </div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); goToQuickGames('lotofacil')">
+                    JOGOS DO DIA
+                </button>
+            </div>
+            <!-- Mega Sena -->
+            <div class="game-card" onclick="goToQuickGames('megasena')">
+                <div class="game-card-header megasena-header">
+                    <img src="assets/megasena.png" alt="Mega Sena" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize megasena-prize" id="prize-megasena">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="contest-megasena">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="draw-megasena">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="countdown-megasena">
+                    ⏰ Carregando...
+                </div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); goToQuickGames('megasena')">
+                    JOGOS DO DIA
+                </button>
+            </div>
+            <!-- Quina -->
+            <div class="game-card" onclick="goToQuickGames('quina')">
+                <div class="game-card-header quina-header">
+                    <img src="assets/quina.png" alt="Quina" class="game-logo" loading="lazy">
+                </div>
+                <div class="game-card-body">
+                    <span class="game-card-prize quina-prize" id="prize-quina">Carregando...</span>
+                    <div class="game-card-details">
+                        <span class="game-card-contest">Concurso: <strong id="contest-quina">nº ---</strong></span>
+                        <span class="game-card-draw">Sorteio: <strong id="draw-quina">---</strong></span>
+                    </div>
+                </div>
+                <div class="game-card-countdown" id="countdown-quina">
+                    ⏰ Carregando...
+                </div>
+                <button class="game-card-cta" onclick="event.stopPropagation(); goToQuickGames('quina')">
+                    JOGOS DO DIA
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Institucional -->
+    <footer class="home-footer">
+        <div class="footer-trust">
+            <i data-lucide="shield"></i>
+            <span>Ambiente 100% seguro</span>
+        </div>
+        <p class="footer-legal">
+            LotoGrana - Plataforma de gestão de apostas lotéricas.<br>
+            Resultados e prêmios são obtidos diretamente da Caixa Econômica Federal.<br>
+            <small>Este serviço não possui vínculo com a Caixa Econômica Federal.</small>
+        </p>
+        <p class="footer-copyright">© 2026 Loto Grana</p>
+    </footer>
+</div>

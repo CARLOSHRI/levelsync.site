@@ -1,0 +1,48 @@
+<div id="screen-withdraw" class="screen">
+    <div class="screen-header-pro">
+        <button class="btn-back-pro" onclick="showScreen('wallet')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Sacar</h2>
+        <div class="header-spacer"></div>
+    </div>
+    
+    <section class="section">
+        <div class="withdraw-balance-card">
+            <div class="withdraw-balance-header">
+                <i data-lucide="wallet"></i>
+                <span>Saldo Disponível</span>
+            </div>
+            <span class="withdraw-balance-value" id="withdraw-available">R$ 0,00</span>
+        </div>
+    </section>
+    
+    <section class="section">
+        <label class="input-label-pro">Valor do saque</label>
+        <div class="withdraw-input-pro">
+            <span class="withdraw-currency">R$</span>
+            <input type="number" id="withdraw-amount" placeholder="0,00" min="20">
+            <button class="btn-max-pro" onclick="setMaxWithdraw()">MAX</button>
+        </div>
+        <span class="input-hint-pro">Valor mínimo: R$ 20,00</span>
+    </section>
+    
+    <section class="section">
+        <label class="input-label-pro">Chave PIX para recebimento</label>
+        <div class="pix-input-wrapper">
+            <i data-lucide="key"></i>
+            <input type="text" id="pix-key" class="pix-input-pro" placeholder="CPF, E-mail, Telefone ou Chave Aleatória">
+        </div>
+    </section>
+    
+    <div class="withdraw-footer">
+        <button class="btn-withdraw-pro" onclick="processWithdraw()">
+            <i data-lucide="send"></i>
+            Solicitar Saque
+        </button>
+        <div class="withdraw-info">
+            <i data-lucide="clock"></i>
+            <span>Processamento em até 24 horas úteis</span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,29 @@
+<div id="screen-pools" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('home')" aria-label="Voltar">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Bolão</h2>
+    </div>
+
+    <div class="pools-unified-content">
+        <div class="pools-panel pools-panel-disponiveis" id="pools-panel-disponiveis">
+            <section class="section pools-section-v2">
+                <div class="lottery-filter-cards pools-lottery-filter">
+                    <button class="lottery-filter-card" data-lottery="lotofacil" onclick="filterPoolsByLottery('lotofacil', this)">
+                        <img src="assets/lotofacil.png" alt="LotoFácil" class="lottery-filter-logo">
+                    </button>
+                    <button class="lottery-filter-card active" data-lottery="megasena" onclick="filterPoolsByLottery('megasena', this)">
+                        <img src="assets/megasena.png" alt="Mega Sena" class="lottery-filter-logo">
+                    </button>
+                    <button class="lottery-filter-card" data-lottery="quina" onclick="filterPoolsByLottery('quina', this)">
+                        <img src="assets/quina.png" alt="Quina" class="lottery-filter-logo">
+                    </button>
+                </div>
+                <div class="pools-list-v2" id="pools-list-page">
+                    <!-- Pools will be rendered by JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,47 @@
+<div id="screen-my-bets" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('home')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Resultados</h2>
+    </div>
+    <section class="section">
+        <div class="bets-filter" id="bets-filter">
+            <button class="filter-btn active" onclick="filterBets('active')" data-filter="active">
+                <i data-lucide="clock"></i>
+                <span>Ativas</span>
+            </button>
+            <button class="filter-btn" onclick="filterBets('won')" data-filter="won">
+                <i data-lucide="trophy"></i>
+                <span>Ganhou</span>
+            </button>
+            <button class="filter-btn" onclick="filterBets('lost')" data-filter="lost">
+                <i data-lucide="x-circle"></i>
+                <span>Perdeu</span>
+            </button>
+        </div>
+    </section>
+    <section class="section">
+        <div class="bets-list" id="bets-list">
+            <!-- Bets will be rendered by JavaScript -->
+        </div>
+    </section>
+    
+    <!-- Tutorial Overlay -->
+    <div class="tutorial-overlay" id="tutorial-overlay">
+        <div class="tutorial-highlight" id="tutorial-highlight"></div>
+        <div class="tutorial-tooltip">
+            <div class="tutorial-arrow"></div>
+            <div class="tutorial-content">
+                <p class="tutorial-title">👆 Filtre seus jogos!</p>
+                <p class="tutorial-text">Clique nos botões acima para ver:</p>
+                <ul class="tutorial-list">
+                    <li><strong class="cor-ativas">Ativas</strong> - Jogos aguardando sorteio</li>
+                    <li><strong class="cor-ganhou">Ganhou</strong> - Jogos premiados</li>
+                    <li><strong class="cor-perdeu">Perdeu</strong> - Jogos não premiados</li>
+                </ul>
+                <button class="tutorial-btn" onclick="closeTutorial()">Entendi!</button>
+            </div>
+        </div>
+    </div>
+</div>

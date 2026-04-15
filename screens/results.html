@@ -1,0 +1,24 @@
+<div id="screen-results" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('home')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Últimos Concursos</h2>
+    </div>
+    <section class="section">
+        <div class="lottery-filter-cards">
+            <button class="lottery-filter-card active" data-lottery="lotofacil" onclick="showResults('lotofacil')">
+                <img src="assets/lotofacil.png" alt="LotoFácil" class="lottery-filter-logo">
+            </button>
+            <button class="lottery-filter-card" data-lottery="megasena" onclick="showResults('megasena')">
+                <img src="assets/megasena.png" alt="Mega Sena" class="lottery-filter-logo">
+            </button>
+            <button class="lottery-filter-card" data-lottery="quina" onclick="showResults('quina')">
+                <img src="assets/quina.png" alt="Quina" class="lottery-filter-logo">
+            </button>
+        </div>
+        <div class="results-list" id="results-list">
+            <!-- Results will be rendered by JavaScript -->
+        </div>
+    </section>
+</div>

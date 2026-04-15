@@ -1,0 +1,37 @@
+<div id="screen-wallet" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('home')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Carteira</h2>
+    </div>
+    <section class="section wallet-main-section">
+        <div class="wallet-card-pro">
+            <span class="wallet-card-value" id="wallet-balance">R$ 0,00</span>
+            <div class="wallet-card-footer">
+                <i data-lucide="wallet"></i>
+                <span>Saldo Disponível</span>
+            </div>
+        </div>
+        <div class="wallet-actions-pro">
+            <button class="wallet-action-btn deposit" onclick="showScreen('deposit')">
+                <span class="wallet-action-icon"><i data-lucide="plus-circle"></i></span>
+                <span class="wallet-action-text">Adicionar saldo</span>
+            </button>
+            <button class="wallet-action-btn withdraw" onclick="showScreen('withdraw')">
+                <span class="wallet-action-icon"><i data-lucide="arrow-up-from-line"></i></span>
+                <span class="wallet-action-text">Sacar</span>
+            </button>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">
+            <i data-lucide="history"></i>
+            Histórico de Transações
+        </h2>
+        <div class="transactions-pro" id="transactions">
+            <!-- Transactions will be rendered by JavaScript -->
+        </div>
+    </section>
+</div>

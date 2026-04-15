@@ -1,0 +1,111 @@
+<div id="screen-deposit" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('wallet')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Depositar</h2>
+    </div>
+    
+    <!-- ETAPA 1: Valor + Dados -->
+    <div id="deposit-step-amount">
+        <section class="section deposit-new">
+            <!-- Valor total em destaque -->
+            <div class="deposit-total-card">
+                <div class="deposit-total-inner">
+                    <span class="deposit-total-label">Valor do depósito</span>
+                    <div class="deposit-total-value">
+                        R$ <span id="deposit-value">100</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Seleção de valores -->
+            <div class="deposit-values-card">
+                <div class="deposit-values-grid">
+                    <button class="deposit-value-btn" onclick="setDepositAmount(20)" data-amount="20">
+                        <span class="btn-value">R$ 20</span>
+                    </button>
+                    <button class="deposit-value-btn" onclick="setDepositAmount(50)" data-amount="50">
+                        <span class="btn-value">R$ 50</span>
+                    </button>
+                    <button class="deposit-value-btn popular active" onclick="setDepositAmount(100)" data-amount="100">
+                        <span class="btn-popular-tag">Mais escolhido</span>
+                        <span class="btn-value">R$ 100</span>
+                    </button>
+                    <button class="deposit-value-btn" onclick="setDepositAmount(200)" data-amount="200">
+                        <span class="btn-value">R$ 200</span>
+                    </button>
+                    <button class="deposit-value-btn" onclick="setDepositAmount(500)" data-amount="500">
+                        <span class="btn-value">R$ 500</span>
+                    </button>
+                    <button class="deposit-value-btn" onclick="setDepositAmount(1000)" data-amount="1000">
+                        <span class="btn-value">R$ 1.000</span>
+                    </button>
+                </div>
+                
+                <!-- Divisor -->
+                <div class="deposit-divider">
+                    <span>ou digite um valor</span>
+                </div>
+                
+                <!-- Input personalizado -->
+                <div class="deposit-custom-input">
+                    <span class="input-currency">R$</span>
+                    <input type="text" id="deposit-amount" value="100" placeholder="0" oninput="onDepositInputChange(this.value)" inputmode="numeric">
+                </div>
+                <span class="deposit-limits">Mínimo R$ 10 · Máximo R$ 5.000</span>
+            </div>
+        </section>
+        
+        <!-- Botão de ação -->
+        <div class="deposit-footer-compact">
+            <button class="btn-deposit-pix" onclick="processDeposit()" id="btn-deposit">
+                <img src="assets/logo-pix.png" alt="PIX" class="btn-pix-icon">
+                Gerar código PIX
+            </button>
+            <div class="deposit-security-badge">
+                <i data-lucide="shield-check"></i>
+                <span>Ambiente 100% seguro</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ETAPA 2: QR Code + Aguardando pagamento -->
+    <div id="deposit-step-pix" class="hidden">
+        <section class="section">
+            <div class="pix-payment-card">
+                <div class="pix-payment-header">
+                    <img src="assets/logo-pix.png" alt="PIX" class="pix-payment-logo">
+                    <div class="pix-payment-value">
+                        <span class="pix-payment-label">Valor a pagar</span>
+                        <span class="pix-payment-amount">R$ <span id="deposit-pix-value">0,00</span></span>
+                    </div>
+                </div>
+                
+                <div class="pix-code-section">
+                    <p class="pix-code-instruction">Copie o código abaixo e cole no app do seu banco:</p>
+                    <div id="pix-code-display" class="pix-code-display"></div>
+                    <button class="btn-copy-pix" onclick="copyPixCode()" id="btn-copy-pix">
+                        <i data-lucide="copy"></i>
+                        Copiar código PIX
+                    </button>
+                </div>
+                
+                <div class="pix-status-section">
+                    <div id="pix-status-icon" class="pix-status-icon">
+                        <div class="pix-loading-spinner"></div>
+                    </div>
+                    <p id="pix-status-text" class="pix-status-text">Aguardando pagamento...</p>
+                    <p class="pix-status-hint">O saldo será creditado automaticamente</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="deposit-footer-compact">
+            <button class="btn-cancel-deposit" onclick="cancelDeposit()">
+                <i data-lucide="x"></i>
+                Cancelar
+            </button>
+        </div>
+    </div>
+</div>

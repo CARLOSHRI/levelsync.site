@@ -1,0 +1,46 @@
+<div id="screen-settings" class="screen">
+    <div class="screen-header-with-back">
+        <button class="back-btn" onclick="showScreen('profile')">
+            <i data-lucide="arrow-left"></i>
+        </button>
+        <h2>Configurações</h2>
+    </div>
+
+    <section class="section">
+        <h2 class="section-title">Dados Pessoais</h2>
+        <div class="settings-form">
+            <label class="settings-label">Nome completo</label>
+            <input type="text" class="settings-input" id="settings-name" placeholder="Seu nome">
+
+            <label class="settings-label">E-mail</label>
+            <input type="email" class="settings-input" id="settings-email" placeholder="seu@email.com">
+
+            <label class="settings-label">Telefone</label>
+            <input type="tel" class="settings-input" id="settings-phone" placeholder="(11) 99999-9999">
+
+            <button class="settings-save-btn" onclick="saveSettingsProfile()">Salvar Alterações</button>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Alterar Senha</h2>
+        <div class="settings-form">
+            <label class="settings-label">Senha atual</label>
+            <input type="password" class="settings-input" id="settings-current-password" placeholder="••••••">
+
+            <label class="settings-label">Nova senha</label>
+            <input type="password" class="settings-input" id="settings-new-password" placeholder="Mínimo 6 caracteres">
+
+            <label class="settings-label">Confirmar nova senha</label>
+            <input type="password" class="settings-input" id="settings-confirm-password" placeholder="Repetir nova senha">
+
+            <button class="settings-save-btn" onclick="saveSettingsPassword()">Alterar Senha</button>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="settings-form">
+            <button class="settings-danger-btn" onclick="handleLogout()">Sair da Conta</button>
+        </div>
+    </section>
+</div>

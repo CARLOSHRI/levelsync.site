@@ -1,0 +1,74 @@
+<div id="screen-betting" class="screen">
+    <div class="betting-header">
+        <div class="betting-title-container">
+            <img id="betting-logo" src="assets/megasena.png" alt="Loteria" class="betting-logo" loading="lazy">
+            <span class="betting-contest-info" id="betting-contest-info">Concurso 0000</span>
+            <span class="betting-draw-date" id="betting-draw-date"></span>
+            <span class="betting-countdown" id="betting-countdown"></span>
+        </div>
+    </div>
+    
+    <div class="betting-modes hidden" role="tablist" aria-label="Modos de geração de jogos">
+        <button class="mode-btn active" onclick="setMode('manual')" id="mode-manual" role="tab" aria-selected="true" aria-controls="number-grid">Manual</button>
+        <button class="mode-btn" onclick="setMode('ai')" id="mode-ai" role="tab" aria-selected="false">IA Expert</button>
+    </div>
+
+    <!-- Header IA + Números Quentes/Frios - Mostrado quando jogos são gerados por IA -->
+    <div class="ia-generated-header hidden" id="ia-generated-header">
+        <div class="ia-header-content">
+            <div class="ia-header-badge">
+                <img src="assets/logo-ia.png" alt="IA" class="ia-header-logo" loading="lazy">
+            </div>
+            <p class="ia-header-description">
+                Jogos gerados com base em <strong>12.517 concursos</strong> analisados
+            </p>
+            <div class="ia-header-stats">
+                <div class="ia-stat">
+                    <span class="ia-stat-value">94.7%</span>
+                    <span class="ia-stat-label">Precisão</span>
+                </div>
+                <div class="ia-stat-divider"></div>
+                <div class="ia-stat">
+                    <span class="ia-stat-value">12.517</span>
+                    <span class="ia-stat-label">Concursos</span>
+                </div>
+                <div class="ia-stat-divider"></div>
+                <div class="ia-stat">
+                    <span class="ia-stat-value">LotoGPT</span>
+                    <span class="ia-stat-label">Engine</span>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Apostas geradas -->
+    <div class="generated-bets hidden" id="generated-bets">
+        <div class="generated-list" id="generated-list"></div>
+    </div>
+
+    <!-- Números selecionados (modo manual) -->
+    <div class="selected-numbers" id="selected-numbers">
+        <span class="selected-label">Números selecionados: <span id="selected-count">0</span>/<span id="max-numbers">6</span></span>
+        <div class="selected-balls" id="selected-balls"></div>
+    </div>
+
+    <div class="number-grid-container">
+        <div class="number-grid" id="number-grid"></div>
+    </div>
+
+    <button class="btn-add-game hidden" id="btn-add-game" onclick="addManualGame()">
+        + ADICIONAR JOGO
+    </button>
+
+    <div class="betting-footer">
+        <div class="bet-value">
+            <span class="bet-label">Valor da aposta</span>
+            <div class="bet-price-row">
+                <span class="bet-price" id="bet-price">R$ 6,00</span>
+                <span class="bet-count" id="bet-count">(1 jogo)</span>
+            </div>
+        </div>
+        <button class="btn-confirm" id="btn-confirm" onclick="confirmBet()" disabled aria-label="Confirmar aposta">Confirmar Aposta</button>
+    </div>
+</div>

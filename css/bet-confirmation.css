@@ -1,0 +1,661 @@
+/* ═══════════════════════════════════════════════════════════════
+   LOTO GRANA - BET CONFIRMATION ANIMATION STYLES
+   Animação de registro de aposta no sistema da Caixa
+   Design Profissional e Institucional
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Modal Principal */
+.bet-confirm-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 20, 40, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: fadeInConfirm 0.4s ease;
+}
+
+.bet-confirm-modal.fade-out {
+    animation: fadeOutConfirm 0.4s ease forwards;
+}
+
+@keyframes fadeInConfirm {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeOutConfirm {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+/* Container */
+.bet-confirm-container {
+    width: 100%;
+    max-width: 420px;
+    background: #FFFFFF;
+    border-radius: 20px;
+    padding: 0;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    animation: slideUpConfirm 0.5s ease;
+    overflow: hidden;
+}
+
+@keyframes slideUpConfirm {
+    from { 
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Header */
+.bet-confirm-header {
+    text-align: center;
+    padding: 28px 24px 20px;
+    background: linear-gradient(135deg, #005CA9 0%, #0077CC 100%);
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+.bet-confirm-header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.bet-confirm-header.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.bet-confirm-header.hidden {
+    display: none;
+}
+
+/* Faixa branca com logo no topo */
+.bet-confirm-logo-bar {
+    background: #FFFFFF;
+    padding: 4px 24px;
+    text-align: center;
+    border-bottom: 1px solid #EAEAEA;
+}
+
+.bet-confirm-logo-bar img {
+    height: 70px;
+    width: auto;
+    object-fit: contain;
+}
+
+.bet-confirm-icon-main {
+    width: 64px;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 16px;
+    position: relative;
+    z-index: 1;
+    animation: iconPulseMain 2s ease-in-out infinite;
+}
+
+@keyframes iconPulseMain {
+    0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        box-shadow: 0 0 0 12px rgba(255, 255, 255, 0);
+        transform: scale(1.02);
+    }
+}
+
+.bet-confirm-icon-main svg {
+    width: 32px;
+    height: 32px;
+    color: white;
+}
+
+.bet-confirm-header h3 {
+    font-size: 17px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.3;
+}
+
+.bet-confirm-subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    position: relative;
+    z-index: 1;
+}
+
+/* Steps */
+.bet-confirm-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 24px;
+    transition: all 0.4s ease;
+}
+
+.bet-confirm-steps.fade-out {
+    opacity: 0;
+    transform: translateY(-20px);
+}
+
+.bet-confirm-steps.hidden {
+    display: none;
+}
+
+.bet-confirm-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: #FAFAFA;
+    border-radius: 12px;
+    border: 1px solid #EEEEEE;
+    transition: all 0.3s ease;
+}
+
+.bet-confirm-step.active {
+    background: linear-gradient(135deg, rgba(0, 92, 169, 0.08), rgba(0, 92, 169, 0.02));
+    border-color: #005CA9;
+    box-shadow: 0 0 0 3px rgba(0, 92, 169, 0.08);
+}
+
+.bet-confirm-step.completed {
+    background: linear-gradient(135deg, rgba(22, 163, 74, 0.08), rgba(22, 163, 74, 0.02));
+    border-color: #16A34A;
+}
+
+.step-icon-container {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+}
+
+.step-icon {
+    width: 40px;
+    height: 40px;
+    background: #E8E8E8;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.step-icon svg {
+    width: 20px;
+    height: 20px;
+    color: #999;
+}
+
+.bet-confirm-step.active .step-icon {
+    background: linear-gradient(135deg, #005CA9, #0077CC);
+    animation: stepIconPulse 1.5s ease-in-out infinite;
+}
+
+.bet-confirm-step.active .step-icon svg {
+    color: white;
+}
+
+@keyframes stepIconPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 92, 169, 0.4); }
+    50% { box-shadow: 0 0 0 6px rgba(0, 92, 169, 0); }
+}
+
+.step-check {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #16A34A, #22C55E);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: checkAppear 0.3s ease;
+}
+
+.step-check.hidden {
+    display: none;
+}
+
+@keyframes checkAppear {
+    from { transform: scale(0) rotate(-45deg); }
+    to { transform: scale(1) rotate(0deg); }
+}
+
+.step-check svg {
+    width: 22px;
+    height: 22px;
+    color: white;
+}
+
+.step-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.step-title {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: #1A1A1A;
+    margin-bottom: 2px;
+}
+
+.step-description {
+    display: block;
+    font-size: 11px;
+    color: #888;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.bet-confirm-step.active .step-title {
+    color: #005CA9;
+}
+
+.bet-confirm-step.completed .step-title {
+    color: #16A34A;
+}
+
+.step-status {
+    flex-shrink: 0;
+    min-width: 64px;
+    text-align: right;
+}
+
+.status-waiting {
+    font-size: 11px;
+    color: #BBB;
+    font-weight: 500;
+}
+
+.status-waiting.hidden {
+    display: none;
+}
+
+.status-processing {
+    display: flex;
+    gap: 4px;
+    justify-content: flex-end;
+}
+
+.status-processing.hidden {
+    display: none;
+}
+
+.processing-dot {
+    width: 7px;
+    height: 7px;
+    background: #005CA9;
+    border-radius: 50%;
+    animation: dotPulse 1.4s ease-in-out infinite;
+}
+
+.processing-dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.processing-dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes dotPulse {
+    0%, 100% { opacity: 0.3; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1); }
+}
+
+.status-done {
+    font-size: 11px;
+    font-weight: 700;
+    color: #16A34A;
+}
+
+.status-done.hidden {
+    display: none;
+}
+
+/* Progress Bar */
+.bet-confirm-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 24px 20px;
+    transition: all 0.4s ease;
+}
+
+.bet-confirm-progress.fade-out {
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.bet-confirm-progress.hidden {
+    display: none;
+}
+
+.progress-bar-container {
+    flex: 1;
+    height: 6px;
+    background: #E8E8E8;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #005CA9, #0077CC, #005CA9);
+    background-size: 200% 100%;
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    animation: progressShine 2s linear infinite;
+}
+
+@keyframes progressShine {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+.progress-text {
+    font-size: 13px;
+    font-weight: 700;
+    color: #005CA9;
+    min-width: 44px;
+    text-align: right;
+}
+
+/* Protocol Success - Professional Design */
+.bet-confirm-protocol {
+    text-align: center;
+    padding: 32px 24px;
+}
+
+.bet-confirm-protocol.hidden {
+    display: none;
+}
+
+.bet-confirm-protocol.show {
+    animation: protocolAppear 0.5s ease;
+}
+
+@keyframes protocolAppear {
+    from { 
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to { 
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.protocol-success-icon {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(135deg, #16A34A, #22C55E);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    box-shadow: 0 8px 32px rgba(22, 163, 74, 0.35);
+    animation: successBounce 0.6s ease;
+    position: relative;
+}
+
+.protocol-success-icon::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(22, 163, 74, 0.3);
+    animation: successRing 1.5s ease-out forwards;
+}
+
+@keyframes successBounce {
+    0% { transform: scale(0); }
+    50% { transform: scale(1.15); }
+    100% { transform: scale(1); }
+}
+
+@keyframes successRing {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+.protocol-success-icon svg {
+    width: 40px;
+    height: 40px;
+    color: white;
+}
+
+.bet-confirm-protocol h4 {
+    font-size: 22px;
+    font-weight: 800;
+    color: #16A34A;
+    margin-bottom: 24px;
+    line-height: 1.3;
+}
+
+.protocol-number {
+    background: linear-gradient(135deg, #F8F9FA, #FFFFFF);
+    border: 2px solid #E0E0E0;
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+    display: block;
+    position: relative;
+    overflow: hidden;
+}
+
+.protocol-number::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #005CA9, #0077CC);
+}
+
+.protocol-label {
+    font-size: 11px;
+    color: #666;
+    display: block;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+.protocol-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #005CA9;
+    font-family: 'SF Mono', 'Courier New', monospace;
+    letter-spacing: 2px;
+}
+
+/* Números destacados (quantidade de jogos e número do concurso) */
+.highlight-number {
+    color: #005CA9;
+    font-weight: 800;
+}
+
+/* Números destacados no header (fundo azul) - usa cor amarela/dourada para contraste */
+.bet-confirm-header .highlight-number {
+    color: #FFD700;
+    font-weight: 800;
+}
+
+.protocol-info {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 20px;
+    padding: 16px 0;
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #F0F0F0;
+}
+
+.protocol-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+    font-weight: 500;
+}
+
+.protocol-item svg {
+    width: 16px;
+    height: 16px;
+    color: #005CA9;
+}
+
+.protocol-message {
+    font-size: 15px;
+    color: #16A34A;
+    font-weight: 600;
+    background: linear-gradient(135deg, rgba(22, 163, 74, 0.12), rgba(22, 163, 74, 0.04));
+    padding: 14px 20px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+/* Botão Ver Meus Jogos */
+.protocol-btn-view-bets {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, #005CA9 0%, #0077CC 100%);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 6px 20px rgba(0, 92, 169, 0.35);
+    animation: btnPulseViewBets 2s ease-in-out infinite;
+}
+
+@keyframes btnPulseViewBets {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+.protocol-btn-view-bets:hover {
+    animation: none;
+    transform: scale(1.03);
+}
+
+.protocol-btn-view-bets:active {
+    transform: scale(0.97);
+    box-shadow: 0 3px 10px rgba(0, 92, 169, 0.3);
+    animation: none;
+}
+
+.protocol-btn-view-bets svg,
+.protocol-btn-view-bets i {
+    width: 22px;
+    height: 22px;
+}
+
+/* Security Badge */
+.protocol-security-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #F0F0F0;
+    font-size: 12px;
+    color: #666;
+}
+
+.protocol-security-badge svg {
+    width: 16px;
+    height: 16px;
+    color: #16A34A;
+}
+
+/* Responsivo */
+@media (max-width: 400px) {
+    .bet-confirm-header {
+        padding: 24px 20px 16px;
+    }
+    
+    .bet-confirm-header h3 {
+        font-size: 15px;
+    }
+    
+    .bet-confirm-steps {
+        padding: 16px 20px;
+    }
+    
+    .bet-confirm-step {
+        padding: 12px;
+        gap: 10px;
+    }
+    
+    .step-title {
+        font-size: 13px;
+    }
+    
+    .step-description {
+        display: none;
+    }
+    
+    .bet-confirm-progress {
+        padding: 0 20px 16px;
+    }
+    
+    .bet-confirm-protocol {
+        padding: 24px 20px;
+    }
+    
+    .protocol-info {
+        gap: 20px;
+    }
+    
+    .protocol-value {
+        font-size: 15px;
+    }
+}
